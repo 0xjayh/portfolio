@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Samuel Ojayhagbega Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -84,6 +86,17 @@ label{font-size:.72rem;font-weight:600;color:var(--muted);display:block;margin-b
 .toast.error{background:var(--red);color:#fff}
 
 @media(max-width:700px){.sidebar{display:none}.main{margin-left:0;padding:1.5rem}.form-row{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}}
+
+/* QUILL EDITOR */
+.quill-field{margin-bottom:1rem}
+.quill-field label{font-size:.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.ql-toolbar{border:1px solid var(--border)!important;border-bottom:none!important;border-radius:var(--radius) var(--radius) 0 0!important;background:#FAFAF9;font-family:'Outfit',sans-serif!important}
+.ql-container{border:1px solid var(--border)!important;border-radius:0 0 var(--radius) var(--radius)!important;font-family:'Outfit',sans-serif!important;font-size:.875rem!important}
+.ql-container:focus-within{border-color:var(--blue)!important;box-shadow:0 0 0 3px rgba(37,99,235,.1)!important}
+.ql-editor{min-height:150px;line-height:1.7}
+.ql-editor.ql-blank::before{font-style:normal!important;color:var(--faint)!important}
+.ql-editor p{margin-bottom:.5rem}
+.ql-snow .ql-picker{font-family:'Outfit',sans-serif!important}
 </style>
 </head>
 <body>
@@ -149,7 +162,7 @@ label{font-size:.72rem;font-weight:600;color:var(--muted);display:block;margin-b
         <div class="field"><label>Category</label><input type="text" id="pf-cat" placeholder="e.g. Embedded Systems"></div>
       </div>
       <div class="field"><label>Excerpt</label><textarea id="pf-excerpt" rows="3" placeholder="Short summary shown on the portfolio..."></textarea></div>
-      <div class="field"><label>Full Content</label><textarea id="pf-content" rows="10" placeholder="Write your full post here..."></textarea></div>
+      <div class="quill-field"><label>Full Content</label><div id="pf-content-editor" style="min-height:220px"></div><textarea id="pf-content" style="display:none"></textarea></div>
       <div class="form-row">
         <div class="field"><label>External URL <span style="text-transform:none;font-weight:400;color:var(--hint)">(optional)</span></label><input type="text" id="pf-url" placeholder="https://medium.com/..."></div>
         <div class="field"><label>Publish Date</label><input type="date" id="pf-date"></div>
@@ -175,14 +188,14 @@ label{font-size:.72rem;font-weight:600;color:var(--muted);display:block;margin-b
         <div class="field"><label>Type</label><select id="pjf-type"><option value="hw">Hardware / Embedded</option><option value="sw">Software</option></select></div>
       </div>
       <div class="field"><label>Short Description <span style="text-transform:none;font-weight:400;color:var(--hint)">(shown on home page)</span></label><textarea id="pjf-desc" rows="2" placeholder="One or two sentence summary..."></textarea></div>
-      <div class="field"><label>Full Description <span style="text-transform:none;font-weight:400;color:var(--hint)">(shown on project page)</span></label><textarea id="pjf-full-desc" rows="5" placeholder="Detailed writeup of the project..."></textarea></div>
+      <div class="quill-field"><label>Full Description <span style="text-transform:none;font-weight:400;color:var(--hint)">(shown on project page)</span></label><div id="pjf-full-desc-editor" style="min-height:200px"></div><textarea id="pjf-full-desc" style="display:none"></textarea></div>
       <div class="form-row">
-        <div class="field"><label>Overview</label><textarea id="pjf-overview" rows="4" placeholder="What is this project and why did you build it?"></textarea></div>
+        <div class="quill-field"><label>Overview</label><div id="pjf-overview-editor" style="min-height:160px"></div><textarea id="pjf-overview" style="display:none"></textarea></div>
         <div class="field"><label>Feature Highlights <span style="text-transform:none;font-weight:400;color:var(--hint)">(one per line)</span></label><textarea id="pjf-features" rows="4" placeholder="Real-time monitoring&#10;Anomaly detection"></textarea></div>
       </div>
       <div class="form-row">
-        <div class="field"><label>Challenges</label><textarea id="pjf-challenges" rows="4" placeholder="What problems did you solve?"></textarea></div>
-        <div class="field"><label>Outcome</label><textarea id="pjf-outcome" rows="4" placeholder="Results, impact, what you learned..."></textarea></div>
+        <div class="quill-field"><label>Challenges</label><div id="pjf-challenges-editor" style="min-height:160px"></div><textarea id="pjf-challenges" style="display:none"></textarea></div>
+        <div class="quill-field"><label>Outcome</label><div id="pjf-outcome-editor" style="min-height:160px"></div><textarea id="pjf-outcome" style="display:none"></textarea></div>
       </div>
       <div class="field"><label>Tech Stack <span style="text-transform:none;font-weight:400;color:var(--hint)">(detailed breakdown)</span></label><textarea id="pjf-tech-stack" rows="3" placeholder="STM32F4 microcontroller, FreeRTOS, MQTT protocol..."></textarea></div>
       <div class="field"><label>Tags <span style="text-transform:none;font-weight:400;color:var(--hint)">(comma separated)</span></label><input type="text" id="pjf-tags" placeholder="Embedded C, RTOS, IoT"></div>
@@ -344,12 +357,13 @@ function openPostForm(reset=true){
   if(reset){
     editPostId=null;
     document.getElementById("post-form-title").textContent="New Post";
-    ["pf-title","pf-cat","pf-excerpt","pf-content","pf-url"].forEach(id=>document.getElementById(id).value="");
+    ["pf-title","pf-cat","pf-excerpt","pf-content","pf-url"].forEach(id=>{const el=document.getElementById(id);if(el)el.value=""});
+    clearQuillValue("pf-content-editor","pf-content");
     document.getElementById("pf-date").value=new Date().toISOString().split("T")[0];
     const btn=document.getElementById("save-post-btn");btn.dataset.label="Save Post";btn.textContent="Save Post";
   }
   document.getElementById("post-form").style.display="block";
-  setTimeout(()=>document.getElementById("pf-title").focus(),50);
+  setTimeout(()=>{ initAllPostEditors(); document.getElementById("pf-title").focus(); },50);
 }
 function closePostForm(){document.getElementById("post-form").style.display="none";editPostId=null}
 
@@ -363,6 +377,7 @@ async function editPost(id){
     document.getElementById("pf-cat").value=p.category||"";
     document.getElementById("pf-excerpt").value=p.excerpt||"";
     document.getElementById("pf-content").value=p.content||"";
+    setTimeout(()=>{ initAllPostEditors(); setQuillValue("pf-content-editor","pf-content",p.content||""); },100);
     document.getElementById("pf-url").value=p.url||"";
     document.getElementById("pf-date").value=p.date||"";
     const btn=document.getElementById("save-post-btn");btn.dataset.label="Update Post";btn.textContent="Update Post";
@@ -373,7 +388,7 @@ async function editPost(id){
 async function savePost(){
   const title=document.getElementById("pf-title").value.trim();
   if(!title){toast("Title is required","error");return}
-  const data={title,category:document.getElementById("pf-cat").value.trim(),excerpt:document.getElementById("pf-excerpt").value.trim(),content:document.getElementById("pf-content").value.trim(),url:document.getElementById("pf-url").value.trim(),date:document.getElementById("pf-date").value};
+  const data={title,category:document.getElementById("pf-cat").value.trim(),excerpt:document.getElementById("pf-excerpt").value.trim(),content:getQuillValue("pf-content-editor","pf-content"),url:document.getElementById("pf-url").value.trim(),date:document.getElementById("pf-date").value};
   setLoading("save-post-btn",true);
   try {
     if(editPostId) await api("PUT",`/posts/${editPostId}`,data);
@@ -417,6 +432,10 @@ function openProjForm(reset=true){
     editProjId=null;
     document.getElementById("proj-form-title").textContent="New Project";
     ["pjf-name","pjf-desc","pjf-full-desc","pjf-overview","pjf-challenges","pjf-outcome","pjf-tech-stack","pjf-tags","pjf-url","pjf-features","pjf-img-url","pjf-img-caption"].forEach(id=>{const el=document.getElementById(id);if(el)el.value=""});
+    clearQuillValue("pjf-full-desc-editor","pjf-full-desc");
+    clearQuillValue("pjf-overview-editor","pjf-overview");
+    clearQuillValue("pjf-challenges-editor","pjf-challenges");
+    clearQuillValue("pjf-outcome-editor","pjf-outcome");
     document.getElementById("pjf-type").value="hw";
     document.getElementById("pjf-images-list").innerHTML="";
     document.getElementById("pjf-snippets-list").innerHTML="";
@@ -424,7 +443,7 @@ function openProjForm(reset=true){
     const btn=document.getElementById("save-proj-btn");btn.dataset.label="Save Project";btn.textContent="Save Project";
   }
   document.getElementById("proj-form").style.display="block";
-  setTimeout(()=>document.getElementById("pjf-name").focus(),50);
+  setTimeout(()=>{ initAllProjectEditors(); document.getElementById("pjf-name").focus(); },50);
 }
 function closeProjForm(){document.getElementById("proj-form").style.display="none";editProjId=null}
 
@@ -441,6 +460,7 @@ async function editProj(id){
     document.getElementById("pjf-overview").value=p.overview||"";
     document.getElementById("pjf-challenges").value=p.challenges||"";
     document.getElementById("pjf-outcome").value=p.outcome||"";
+    setTimeout(()=>{ initAllProjectEditors(); setQuillValue("pjf-full-desc-editor","pjf-full-desc",p.full_description||""); setQuillValue("pjf-overview-editor","pjf-overview",p.overview||""); setQuillValue("pjf-challenges-editor","pjf-challenges",p.challenges||""); setQuillValue("pjf-outcome-editor","pjf-outcome",p.outcome||""); },100);
     document.getElementById("pjf-tech-stack").value=p.tech_stack||"";
     document.getElementById("pjf-tags").value=(p.tags||[]).join(", ");
     document.getElementById("pjf-url").value=p.url||"";
@@ -459,10 +479,10 @@ async function saveProject(){
     name,
     type:document.getElementById("pjf-type").value,
     desc:document.getElementById("pjf-desc").value.trim(),
-    full_description:document.getElementById("pjf-full-desc").value.trim(),
-    overview:document.getElementById("pjf-overview").value.trim(),
-    challenges:document.getElementById("pjf-challenges").value.trim(),
-    outcome:document.getElementById("pjf-outcome").value.trim(),
+    full_description:getQuillValue("pjf-full-desc-editor","pjf-full-desc"),
+    overview:getQuillValue("pjf-overview-editor","pjf-overview"),
+    challenges:getQuillValue("pjf-challenges-editor","pjf-challenges"),
+    outcome:getQuillValue("pjf-outcome-editor","pjf-outcome"),
     tech_stack:document.getElementById("pjf-tech-stack").value.trim(),
     tags:document.getElementById("pjf-tags").value.split(",").map(t=>t.trim()).filter(Boolean),
     url:document.getElementById("pjf-url").value.trim(),
@@ -538,6 +558,62 @@ async function saveBio(){
   finally{ setLoading("save-bio-btn",false) }
 }
 
+
+
+// ── QUILL EDITORS ──────────────────────────────────────────────
+const QUILL_TOOLBAR = [
+  [{ header: [1, 2, 3, false] }],
+  [{ font: [] }, { size: ['small', false, 'large', 'huge'] }],
+  ['bold', 'italic', 'underline', 'strike'],
+  [{ color: [] }, { background: [] }],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  [{ align: [] }],
+  ['link', 'image'],
+  ['clean']
+];
+
+const quillEditors = {};
+
+function initQuill(editorId, placeholderText) {
+  if (quillEditors[editorId]) return quillEditors[editorId];
+  const q = new Quill('#' + editorId, {
+    theme: 'snow',
+    placeholder: placeholderText || 'Write here...',
+    modules: { toolbar: QUILL_TOOLBAR }
+  });
+  quillEditors[editorId] = q;
+  return q;
+}
+
+function getQuillValue(editorId, textareaId) {
+  const q = quillEditors[editorId];
+  if (!q) return document.getElementById(textareaId)?.value || '';
+  const html = q.root.innerHTML;
+  return html === '<p><br></p>' ? '' : html;
+}
+
+function setQuillValue(editorId, textareaId, value) {
+  const q = quillEditors[editorId];
+  if (!q) { const el = document.getElementById(textareaId); if(el) el.value = value; return; }
+  q.root.innerHTML = value || '';
+}
+
+function clearQuillValue(editorId, textareaId) {
+  const q = quillEditors[editorId];
+  if (!q) { const el = document.getElementById(textareaId); if(el) el.value = ''; return; }
+  q.setText('');
+}
+
+function initAllPostEditors() {
+  initQuill('pf-content-editor', 'Write your full post here...');
+}
+
+function initAllProjectEditors() {
+  initQuill('pjf-full-desc-editor',  'Detailed writeup of the project...');
+  initQuill('pjf-overview-editor',   'What is this project and why did you build it?');
+  initQuill('pjf-challenges-editor', 'What problems did you solve?');
+  initQuill('pjf-outcome-editor',    'Results, impact, what you learned...');
+}
 
 // ── PROJECT IMAGES & SNIPPETS STATE ──
 let projImages = [];
