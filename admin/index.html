@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Samuel Ojayhagbega Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F4F4F0;--surface:#fff;--border:#DDDDD8;--border2:#EAEAE5;
+  --text:#141414;--muted:#666;--hint:#999;--faint:#BBB;
+  --blue:#2563EB;--blue-bg:#EBF2FE;--blue-border:#BFCFFB;
+  --green:#1D7A55;--green-bg:#E4F5ED;--green-border:#B6E3CB;
+  --red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA;
+  --radius:6px;--radius-lg:8px;--sidebar:220px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;display:flex}
+
+.sidebar{width:var(--sidebar);background:var(--text);min-height:100vh;display:flex;flex-direction:column;padding:1.75rem 1.25rem;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;overflow-y:auto}
+.sidebar-logo{font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:#fff;font-weight:500;letter-spacing:.04em;margin-bottom:.25rem}
+.sidebar-sub{font-size:.65rem;color:#555;font-family:'IBM Plex Mono',monospace;margin-bottom:2rem}
+.sidebar-section{font-size:.58rem;text-transform:uppercase;letter-spacing:.14em;color:#444;font-weight:600;margin-bottom:.5rem;margin-top:1.25rem}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius);cursor:pointer;font-size:.82rem;color:#888;font-weight:500;transition:all .18s;border:none;background:transparent;text-align:left;width:100%}
+.nav-item:hover{color:#fff;background:#222}
+.nav-item.active{color:#fff;background:#222}
+.nav-item svg{opacity:.6;flex-shrink:0;width:15px;height:15px}
+.nav-item.active svg{opacity:1}
+.sidebar-footer{margin-top:auto;padding-top:1.5rem;border-top:1px solid #222}
+.view-site{display:flex;align-items:center;gap:8px;font-size:.78rem;color:#666;text-decoration:none;transition:color .2s;font-weight:500}
+.view-site:hover{color:#fff}
+
+.main{margin-left:var(--sidebar);flex:1;padding:2rem 2.5rem 4rem;max-width:800px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.page-title{font-size:1.2rem;font-weight:700;letter-spacing:-.02em}
+.page-sub{font-size:.78rem;color:var(--hint);margin-top:2px}
+
+input,textarea,select{font-family:'Outfit',sans-serif;font-size:.875rem;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;width:100%;transition:border-color .18s,box-shadow .18s;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+textarea{resize:vertical}
+label{font-size:.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.field{margin-bottom:1rem}
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;padding:8px 18px;border-radius:var(--radius);border:1px solid;cursor:pointer;transition:all .18s;white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:var(--text);color:#fff;border-color:var(--text)}
+.btn-primary:hover:not(:disabled){background:#333}
+.btn-outline{background:transparent;color:var(--text);border-color:var(--border)}
+.btn-outline:hover:not(:disabled){border-color:var(--text)}
+.btn-danger{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+.btn-danger:hover:not(:disabled){background:#fee2e2}
+.btn-sm{padding:5px 12px;font-size:.75rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-actions{display:flex;gap:.75rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border2);flex-wrap:wrap}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem}
+.card-title{font-size:.9rem;font-weight:700;margin-bottom:1.1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border2)}
+.panel{display:none}.panel.active{display:block}
+.badge{font-size:.6rem;font-family:'IBM Plex Mono',monospace;padding:2px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:.05em}
+.badge.hw{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.badge.sw{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+
+.list-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1.1rem;display:flex;align-items:center;gap:1rem;margin-bottom:6px;transition:border-color .18s}
+.list-item:hover{border-color:var(--faint)}
+.list-item-body{flex:1;min-width:0}
+.list-item-title{font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list-item-meta{font-size:.7rem;color:var(--hint);font-family:'IBM Plex Mono',monospace;margin-top:2px}
+.list-item-actions{display:flex;gap:5px;flex-shrink:0}
+.empty{padding:2rem;text-align:center;color:var(--faint);font-size:.82rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg)}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem}
+.stat-box-num{font-family:'IBM Plex Mono',monospace;font-size:1.6rem;font-weight:500;line-height:1;margin-bottom:3px}
+.stat-box-label{font-size:.7rem;color:var(--hint);text-transform:uppercase;letter-spacing:.1em}
+
+.photo-drop{border:2px dashed var(--border);border-radius:var(--radius);padding:1.75rem;text-align:center;cursor:pointer;transition:border-color .2s;background:#FAFAF9;position:relative}
+.photo-drop:hover{border-color:var(--blue)}
+.photo-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-drop img{width:80px;height:80px;border-radius:var(--radius);object-fit:cover;margin:0 auto .75rem;display:block;border:1px solid var(--border)}
+.photo-drop-text strong{display:block;color:var(--blue);margin-bottom:3px;font-size:.85rem}
+.photo-drop-text{font-size:.82rem;color:var(--hint);line-height:1.6}
+
+.toast{position:fixed;bottom:2rem;right:2rem;padding:10px 20px;border-radius:var(--radius);font-size:.82rem;font-weight:500;z-index:9999;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.success{background:var(--text);color:#fff}
+.toast.error{background:var(--red);color:#fff}
+
+@media(max-width:700px){.sidebar{display:none}.main{margin-left:0;padding:1.5rem}.form-row{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">Portfolio CMS</div>
+  <div class="sidebar-sub">samuel.dev · admin</div>
+  <div class="sidebar-section">Content</div>
+  <button class="nav-item active" onclick="switchPanel('dashboard',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
+  </button>
+  <button class="nav-item" onclick="switchPanel('posts',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Blog Posts
+  </button>
+  <button class="nav-item" onclick="switchPanel('projects',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>Projects
+  </button>
+  <button class="nav-item" onclick="switchPanel('bio',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Bio & Profile
+  </button>
+  <div class="sidebar-footer">
+    <a class="view-site" href="/" target="_blank">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      View live site
+    </a>
+  </div>
+</aside>
+
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <div id="panel-dashboard" class="panel active">
+    <div class="topbar">
+      <div><div class="page-title">Dashboard</div><div class="page-sub">Welcome back, Samuel.</div></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-box-num" id="dash-posts">—</div><div class="stat-box-label">Blog Posts</div></div>
+      <div class="stat-box"><div class="stat-box-num" id="dash-projects">—</div><div class="stat-box-label">Projects</div></div>
+      <div class="stat-box"><div class="stat-box-num" id="dash-status">●</div><div class="stat-box-label">API Status</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Quick Actions</div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="switchPanel('posts',null);openPostForm()">+ New Blog Post</button>
+        <button class="btn btn-outline btn-sm" onclick="switchPanel('projects',null);openProjForm()">+ New Project</button>
+        <button class="btn btn-outline btn-sm" onclick="switchPanel('bio',null)">Edit Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOG POSTS -->
+  <div id="panel-posts" class="panel">
+    <div class="topbar">
+      <div><div class="page-title">Blog Posts</div><div class="page-sub" id="posts-sub">Loading...</div></div>
+      <button class="btn btn-primary btn-sm" onclick="openPostForm()">+ New Post</button>
+    </div>
+    <div id="post-list"></div>
+    <div class="card hidden" id="post-form" style="display:none">
+      <div class="card-title" id="post-form-title">New Post</div>
+      <div class="form-row">
+        <div class="field"><label>Title</label><input type="text" id="pf-title" placeholder="Your post title"></div>
+        <div class="field"><label>Category</label><input type="text" id="pf-cat" placeholder="e.g. Embedded Systems"></div>
+      </div>
+      <div class="field"><label>Excerpt</label><textarea id="pf-excerpt" rows="3" placeholder="Short summary shown on the portfolio..."></textarea></div>
+      <div class="field"><label>Full Content</label><textarea id="pf-content" rows="10" placeholder="Write your full post here..."></textarea></div>
+      <div class="form-row">
+        <div class="field"><label>External URL <span style="text-transform:none;font-weight:400;color:var(--hint)">(optional)</span></label><input type="text" id="pf-url" placeholder="https://medium.com/..."></div>
+        <div class="field"><label>Publish Date</label><input type="date" id="pf-date"></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="save-post-btn" onclick="savePost()">Save Post</button>
+        <button class="btn btn-outline" onclick="closePostForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div id="panel-projects" class="panel">
+    <div class="topbar">
+      <div><div class="page-title">Projects</div><div class="page-sub" id="projs-sub">Loading...</div></div>
+      <button class="btn btn-primary btn-sm" onclick="openProjForm()">+ New Project</button>
+    </div>
+    <div id="proj-list"></div>
+    <div class="card" id="proj-form" style="display:none">
+      <div class="card-title" id="proj-form-title">New Project</div>
+      <div class="form-row">
+        <div class="field"><label>Project Name</label><input type="text" id="pjf-name" placeholder="Project title"></div>
+        <div class="field"><label>Type</label><select id="pjf-type"><option value="hw">Hardware / Embedded</option><option value="sw">Software</option></select></div>
+      </div>
+      <div class="field"><label>Short Description <span style="text-transform:none;font-weight:400;color:var(--hint)">(shown on home page)</span></label><textarea id="pjf-desc" rows="2" placeholder="One or two sentence summary..."></textarea></div>
+      <div class="field"><label>Full Description <span style="text-transform:none;font-weight:400;color:var(--hint)">(shown on project page)</span></label><textarea id="pjf-full-desc" rows="5" placeholder="Detailed writeup of the project..."></textarea></div>
+      <div class="form-row">
+        <div class="field"><label>Overview</label><textarea id="pjf-overview" rows="4" placeholder="What is this project and why did you build it?"></textarea></div>
+        <div class="field"><label>Feature Highlights <span style="text-transform:none;font-weight:400;color:var(--hint)">(one per line)</span></label><textarea id="pjf-features" rows="4" placeholder="Real-time monitoring&#10;Anomaly detection"></textarea></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Challenges</label><textarea id="pjf-challenges" rows="4" placeholder="What problems did you solve?"></textarea></div>
+        <div class="field"><label>Outcome</label><textarea id="pjf-outcome" rows="4" placeholder="Results, impact, what you learned..."></textarea></div>
+      </div>
+      <div class="field"><label>Tech Stack <span style="text-transform:none;font-weight:400;color:var(--hint)">(detailed breakdown)</span></label><textarea id="pjf-tech-stack" rows="3" placeholder="STM32F4 microcontroller, FreeRTOS, MQTT protocol..."></textarea></div>
+      <div class="field"><label>Tags <span style="text-transform:none;font-weight:400;color:var(--hint)">(comma separated)</span></label><input type="text" id="pjf-tags" placeholder="Embedded C, RTOS, IoT"></div>
+      <div class="field"><label>Project URL <span style="text-transform:none;font-weight:400;color:var(--hint)">(optional)</span></label><input type="text" id="pjf-url" placeholder="https://github.com/..."></div>
+
+      <div class="field" style="margin-top:1rem">
+        <label>Images</label>
+        <div id="pjf-images-list" style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:.6rem"></div>
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+          <input type="text" id="pjf-img-url" placeholder="Image URL (https://...)" style="flex:1;min-width:200px">
+          <input type="text" id="pjf-img-caption" placeholder="Caption (optional)" style="flex:1;min-width:160px">
+          <button class="btn btn-outline btn-sm" onclick="addImageUrl()" type="button">+ Add URL</button>
+        </div>
+        <div style="margin-top:.5rem">
+          <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.78rem;font-weight:500;color:var(--blue);padding:5px 0">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload image from device
+            <input type="file" accept="image/*" style="display:none" onchange="uploadImage(event)">
+          </label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:.5rem">
+        <label>Code Snippets</label>
+        <div id="pjf-snippets-list" style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:.6rem"></div>
+        <button class="btn btn-outline btn-sm" onclick="addSnippet()" type="button">+ Add Code Snippet</button>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" id="save-proj-btn" onclick="saveProject()">Save Project</button>
+        <button class="btn btn-outline" onclick="closeProjForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIO -->
+  <div id="panel-bio" class="panel">
+    <div class="topbar"><div><div class="page-title">Bio & Profile</div><div class="page-sub">Changes save directly to the database.</div></div></div>
+    <div class="card">
+      <div class="card-title">Profile Photo</div>
+      <div class="photo-drop" id="photo-drop">
+        <input type="file" accept="image/*" onchange="handlePhoto(event)">
+        <img id="photo-prev" src="" style="display:none" alt="Preview">
+        <div class="photo-drop-text"><strong>Click to upload photo</strong>JPG, PNG or WebP · Max 1MB</div>
+      </div>
+      <div style="margin-top:.75rem;display:flex;gap:.75rem">
+        <button class="btn btn-primary btn-sm" onclick="savePhoto()">Save Photo</button>
+        <button class="btn btn-danger btn-sm" onclick="removePhoto()">Remove</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Personal Info</div>
+      <div class="form-row">
+        <div class="field"><label>Full Name</label><input type="text" id="bf-name"></div>
+        <div class="field"><label>Title / Role</label><input type="text" id="bf-role"></div>
+      </div>
+      <div class="field"><label>Bio</label><textarea id="bf-bio" rows="5"></textarea></div>
+      <div class="field"><label>Hero Tagline</label><input type="text" id="bf-tagline"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Links</div>
+      <div class="form-row">
+        <div class="field"><label>GitHub URL</label><input type="text" id="bf-github"></div>
+        <div class="field"><label>LinkedIn URL</label><input type="text" id="bf-linkedin"></div>
+      </div>
+      <div class="field"><label>Email</label><input type="text" id="bf-email"></div>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="save-bio-btn" onclick="saveBio()">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const API = "/api";
+let editPostId = null;
+let editProjId = null;
+let pendingPhoto = null;
+let currentBio = {};
+
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+
+function toast(msg, type="success"){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.className = `toast ${type} show`;
+  setTimeout(()=>t.classList.remove("show"), 2800);
+}
+
+async function api(method, path, body){
+  const opts = {method, headers:{"Content-Type":"application/json"}};
+  if(body) opts.body = JSON.stringify(body);
+  const res = await fetch(API + path, opts);
+  if(!res.ok) throw new Error(`API error: ${res.status}`);
+  return res.json();
+}
+
+function setLoading(btnId, loading){
+  const btn = document.getElementById(btnId);
+  if(!btn) return;
+  btn.disabled = loading;
+  btn.textContent = loading ? "Saving..." : btn.dataset.label || btn.textContent;
+}
+
+// ── NAVIGATION ──
+function switchPanel(id, el){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
+  document.getElementById("panel-"+id).classList.add("active");
+  if(el) el.classList.add("active");
+  else document.querySelectorAll(".nav-item").forEach(n=>{
+    if(n.getAttribute("onclick")?.includes(`'${id}'`)) n.classList.add("active");
+  });
+  if(id === "bio") loadBioForm();
+  if(id === "posts") loadPosts();
+  if(id === "projects") loadProjects();
+}
+
+// ── DASHBOARD ──
+async function loadDashboard(){
+  try {
+    const [health, posts, projects] = await Promise.all([
+      api("GET", "/health"),
+      api("GET", "/posts"),
+      api("GET", "/projects"),
+    ]);
+    document.getElementById("dash-posts").textContent = posts.length;
+    document.getElementById("dash-projects").textContent = projects.length;
+    document.getElementById("dash-status").textContent = "●";
+    document.getElementById("dash-status").style.color = "#1D7A55";
+  } catch(e){
+    document.getElementById("dash-status").textContent = "●";
+    document.getElementById("dash-status").style.color = "#DC2626";
+  }
+}
+
+// ── POSTS ──
+async function loadPosts(){
+  try {
+    const posts = await api("GET", "/posts");
+    document.getElementById("posts-sub").textContent = posts.length + " posts";
+    const list = document.getElementById("post-list");
+    if(!posts.length){list.innerHTML='<div class="empty">No posts yet. Click "+ New Post" to write your first.</div>';return}
+    list.innerHTML = posts.map(p=>`
+      <div class="list-item">
+        <div class="list-item-body">
+          <div class="list-item-title">${esc(p.title)}</div>
+          <div class="list-item-meta">${esc(p.category||"Uncategorised")} · ${p.date||"No date"}</div>
+        </div>
+        <div class="list-item-actions">
+          <button class="btn btn-outline btn-sm" onclick="editPost(${p.id})">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deletePost(${p.id})">Delete</button>
+        </div>
+      </div>`).join("");
+  } catch(e){ toast("Failed to load posts", "error") }
+}
+
+function openPostForm(reset=true){
+  if(reset){
+    editPostId=null;
+    document.getElementById("post-form-title").textContent="New Post";
+    ["pf-title","pf-cat","pf-excerpt","pf-content","pf-url"].forEach(id=>document.getElementById(id).value="");
+    document.getElementById("pf-date").value=new Date().toISOString().split("T")[0];
+    const btn=document.getElementById("save-post-btn");btn.dataset.label="Save Post";btn.textContent="Save Post";
+  }
+  document.getElementById("post-form").style.display="block";
+  setTimeout(()=>document.getElementById("pf-title").focus(),50);
+}
+function closePostForm(){document.getElementById("post-form").style.display="none";editPostId=null}
+
+async function editPost(id){
+  try {
+    const posts = await api("GET","/posts");
+    const p = posts.find(x=>x.id===id); if(!p) return;
+    editPostId=id;
+    document.getElementById("post-form-title").textContent="Edit Post";
+    document.getElementById("pf-title").value=p.title||"";
+    document.getElementById("pf-cat").value=p.category||"";
+    document.getElementById("pf-excerpt").value=p.excerpt||"";
+    document.getElementById("pf-content").value=p.content||"";
+    document.getElementById("pf-url").value=p.url||"";
+    document.getElementById("pf-date").value=p.date||"";
+    const btn=document.getElementById("save-post-btn");btn.dataset.label="Update Post";btn.textContent="Update Post";
+    openPostForm(false);
+  } catch(e){ toast("Failed to load post","error") }
+}
+
+async function savePost(){
+  const title=document.getElementById("pf-title").value.trim();
+  if(!title){toast("Title is required","error");return}
+  const data={title,category:document.getElementById("pf-cat").value.trim(),excerpt:document.getElementById("pf-excerpt").value.trim(),content:document.getElementById("pf-content").value.trim(),url:document.getElementById("pf-url").value.trim(),date:document.getElementById("pf-date").value};
+  setLoading("save-post-btn",true);
+  try {
+    if(editPostId) await api("PUT",`/posts/${editPostId}`,data);
+    else await api("POST","/posts",data);
+    closePostForm();loadPosts();loadDashboard();
+    toast(editPostId?"Post updated ✓":"Post published ✓");editPostId=null;
+  } catch(e){ toast("Failed to save post","error") }
+  finally{ setLoading("save-post-btn",false) }
+}
+
+async function deletePost(id){
+  if(!confirm("Delete this post? This cannot be undone.")) return;
+  try { await api("DELETE",`/posts/${id}`);loadPosts();loadDashboard();toast("Post deleted") }
+  catch(e){ toast("Failed to delete post","error") }
+}
+
+// ── PROJECTS ──
+async function loadProjects(){
+  try {
+    const projects = await api("GET","/projects");
+    document.getElementById("projs-sub").textContent = projects.length + " projects";
+    const list = document.getElementById("proj-list");
+    if(!projects.length){list.innerHTML='<div class="empty">No projects yet.</div>';return}
+    list.innerHTML = projects.map(p=>`
+      <div class="list-item">
+        <span class="badge ${p.type}">${p.type==="hw"?"Hardware":"Software"}</span>
+        <div class="list-item-body">
+          <div class="list-item-title">${esc(p.name)}</div>
+          <div class="list-item-meta">${(p.tags||[]).slice(0,3).join(" · ")}</div>
+        </div>
+        <div class="list-item-actions">
+          <button class="btn btn-outline btn-sm" onclick="editProj(${p.id})">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProj(${p.id})">Delete</button>
+        </div>
+      </div>`).join("");
+  } catch(e){ toast("Failed to load projects","error") }
+}
+
+function openProjForm(reset=true){
+  if(reset){
+    editProjId=null;
+    document.getElementById("proj-form-title").textContent="New Project";
+    ["pjf-name","pjf-desc","pjf-full-desc","pjf-overview","pjf-challenges","pjf-outcome","pjf-tech-stack","pjf-tags","pjf-url","pjf-features","pjf-img-url","pjf-img-caption"].forEach(id=>{const el=document.getElementById(id);if(el)el.value=""});
+    document.getElementById("pjf-type").value="hw";
+    document.getElementById("pjf-images-list").innerHTML="";
+    document.getElementById("pjf-snippets-list").innerHTML="";
+    projImages=[];projSnippets=[];
+    const btn=document.getElementById("save-proj-btn");btn.dataset.label="Save Project";btn.textContent="Save Project";
+  }
+  document.getElementById("proj-form").style.display="block";
+  setTimeout(()=>document.getElementById("pjf-name").focus(),50);
+}
+function closeProjForm(){document.getElementById("proj-form").style.display="none";editProjId=null}
+
+async function editProj(id){
+  try {
+    const projects = await api("GET","/projects");
+    const p = projects.find(x=>x.id===id); if(!p) return;
+    editProjId=id;
+    document.getElementById("proj-form-title").textContent="Edit Project";
+    document.getElementById("pjf-name").value=p.name||"";
+    document.getElementById("pjf-type").value=p.type||"hw";
+    document.getElementById("pjf-desc").value=p.description||"";
+    document.getElementById("pjf-full-desc").value=p.full_description||"";
+    document.getElementById("pjf-overview").value=p.overview||"";
+    document.getElementById("pjf-challenges").value=p.challenges||"";
+    document.getElementById("pjf-outcome").value=p.outcome||"";
+    document.getElementById("pjf-tech-stack").value=p.tech_stack||"";
+    document.getElementById("pjf-tags").value=(p.tags||[]).join(", ");
+    document.getElementById("pjf-url").value=p.url||"";
+    document.getElementById("pjf-features").value=(p.features||[]).join("\n");
+    projImages=p.images||[];projSnippets=p.code_snippets||[];
+    renderImagesList();renderSnippetsList();
+    const btn=document.getElementById("save-proj-btn");btn.dataset.label="Update Project";btn.textContent="Update Project";
+    openProjForm(false);
+  } catch(e){ toast("Failed to load project","error") }
+}
+
+async function saveProject(){
+  const name=document.getElementById("pjf-name").value.trim();
+  if(!name){toast("Project name is required","error");return}
+  const data={
+    name,
+    type:document.getElementById("pjf-type").value,
+    desc:document.getElementById("pjf-desc").value.trim(),
+    full_description:document.getElementById("pjf-full-desc").value.trim(),
+    overview:document.getElementById("pjf-overview").value.trim(),
+    challenges:document.getElementById("pjf-challenges").value.trim(),
+    outcome:document.getElementById("pjf-outcome").value.trim(),
+    tech_stack:document.getElementById("pjf-tech-stack").value.trim(),
+    tags:document.getElementById("pjf-tags").value.split(",").map(t=>t.trim()).filter(Boolean),
+    url:document.getElementById("pjf-url").value.trim(),
+    features:document.getElementById("pjf-features").value.split("\n").map(f=>f.trim()).filter(Boolean),
+    images:projImages,
+    code_snippets:projSnippets,
+  };
+  setLoading("save-proj-btn",true);
+  try {
+    if(editProjId) await api("PUT",`/projects/${editProjId}`,data);
+    else await api("POST","/projects",data);
+    closeProjForm();loadProjects();loadDashboard();
+    toast(editProjId?"Project updated ✓":"Project added ✓");editProjId=null;
+  } catch(e){ toast("Failed to save project","error") }
+  finally{ setLoading("save-proj-btn",false) }
+}
+
+async function deleteProj(id){
+  if(!confirm("Delete this project?")) return;
+  try { await api("DELETE",`/projects/${id}`);loadProjects();loadDashboard();toast("Project deleted") }
+  catch(e){ toast("Failed to delete","error") }
+}
+
+// ── BIO ──
+async function loadBioForm(){
+  try {
+    const b = await api("GET","/bio");
+    currentBio = b;
+    document.getElementById("bf-name").value=b.name||"";
+    document.getElementById("bf-role").value=b.role||"";
+    document.getElementById("bf-bio").value=b.bio||"";
+    document.getElementById("bf-tagline").value=b.tagline||"";
+    document.getElementById("bf-github").value=b.github||"";
+    document.getElementById("bf-linkedin").value=b.linkedin||"";
+    document.getElementById("bf-email").value=b.email||"";
+    if(b.photo){const img=document.getElementById("photo-prev");img.src=b.photo;img.style.display="block"}
+  } catch(e){ toast("Failed to load profile","error") }
+}
+
+function handlePhoto(e){
+  const file=e.target.files[0]; if(!file) return;
+  if(file.size>1.2*1024*1024){toast("Photo must be under 1MB","error");return}
+  const r=new FileReader();
+  r.onload=ev=>{pendingPhoto=ev.target.result;const img=document.getElementById("photo-prev");img.src=ev.target.result;img.style.display="block"}
+  r.readAsDataURL(file);
+}
+
+async function savePhoto(){
+  if(!pendingPhoto){toast("No photo selected","error");return}
+  try {
+    await api("POST","/bio",{...currentBio,photo:pendingPhoto});
+    currentBio.photo=pendingPhoto;pendingPhoto=null;
+    toast("Photo saved ✓");
+  } catch(e){ toast("Failed to save photo","error") }
+}
+
+async function removePhoto(){
+  if(!confirm("Remove profile photo?")) return;
+  try {
+    await api("POST","/bio",{...currentBio,photo:""});
+    currentBio.photo="";document.getElementById("photo-prev").style.display="none";
+    toast("Photo removed");
+  } catch(e){ toast("Failed to remove photo","error") }
+}
+
+async function saveBio(){
+  setLoading("save-bio-btn",true);
+  const data={...currentBio,name:document.getElementById("bf-name").value.trim(),role:document.getElementById("bf-role").value.trim(),bio:document.getElementById("bf-bio").value.trim(),tagline:document.getElementById("bf-tagline").value.trim(),github:document.getElementById("bf-github").value.trim(),linkedin:document.getElementById("bf-linkedin").value.trim(),email:document.getElementById("bf-email").value.trim()};
+  try {
+    await api("POST","/bio",data);
+    currentBio=data;toast("Profile saved ✓");
+  } catch(e){ toast("Failed to save profile","error") }
+  finally{ setLoading("save-bio-btn",false) }
+}
+
+
+// ── PROJECT IMAGES & SNIPPETS STATE ──
+let projImages = [];
+let projSnippets = [];
+
+function renderImagesList(){
+  const list = document.getElementById("pjf-images-list");
+  if(!list) return;
+  list.innerHTML = projImages.map((img,i)=>`
+    <div style="display:flex;align-items:center;gap:.5rem;background:var(--border2);padding:6px 10px;border-radius:var(--radius);font-size:.75rem">
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'IBM Plex Mono',monospace">${esc(img.url.substring(0,50))}${img.url.length>50?"...":""}</span>
+      ${img.caption?`<span style="color:var(--hint)">${esc(img.caption)}</span>`:""}
+      <button class="btn btn-danger btn-sm" onclick="removeImage(${i})" type="button" style="padding:2px 8px">×</button>
+    </div>`).join("");
+}
+
+function addImageUrl(){
+  const url = document.getElementById("pjf-img-url").value.trim();
+  const caption = document.getElementById("pjf-img-caption").value.trim();
+  if(!url){toast("Enter an image URL","error");return}
+  projImages.push({url,caption});
+  document.getElementById("pjf-img-url").value="";
+  document.getElementById("pjf-img-caption").value="";
+  renderImagesList();
+}
+
+function uploadImage(e){
+  const file = e.target.files[0]; if(!file) return;
+  if(file.size > 1.5*1024*1024){toast("Image must be under 1.5MB","error");return}
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const caption = prompt("Add a caption (optional):","") || "";
+    projImages.push({url:ev.target.result, caption});
+    renderImagesList();
+    toast("Image added ✓");
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeImage(i){projImages.splice(i,1);renderImagesList()}
+
+function renderSnippetsList(){
+  const list = document.getElementById("pjf-snippets-list");
+  if(!list) return;
+  list.innerHTML = projSnippets.map((s,i)=>`
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+      <div style="display:flex;align-items:center;gap:.5rem;padding:.6rem .85rem;background:var(--border2);border-bottom:1px solid var(--border)">
+        <input type="text" value="${esc(s.title||"")}" placeholder="Snippet title" onchange="projSnippets[${i}].title=this.value" style="flex:1;padding:4px 8px;font-size:.78rem">
+        <select onchange="projSnippets[${i}].language=this.value" style="padding:4px 8px;font-size:.75rem;width:auto">
+          ${["python","javascript","c","cpp","bash","sql","json","html","css","typescript"].map(l=>`<option value="${l}" ${s.language===l?"selected":""}>${l}</option>`).join("")}
+        </select>
+        <button class="btn btn-danger btn-sm" onclick="removeSnippet(${i})" type="button" style="padding:2px 8px">×</button>
+      </div>
+      <textarea style="width:100%;padding:.85rem;font-family:'IBM Plex Mono',monospace;font-size:.78rem;border:none;outline:none;resize:vertical;min-height:120px;background:#fff" placeholder="Paste your code here..." onchange="projSnippets[${i}].code=this.value">${esc(s.code||"")}</textarea>
+    </div>`).join("");
+}
+
+function addSnippet(){
+  projSnippets.push({title:"",language:"python",code:""});
+  renderSnippetsList();
+}
+
+function removeSnippet(i){projSnippets.splice(i,1);renderSnippetsList()}
+
+// ── INIT ──
+loadDashboard();
+</script>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samuel Ojayhagbega — AI Engineer & Embedded Systems</title>
+<meta name="description" content="AI Engineer and Embedded Systems developer building hardware that reads the physical world and software that makes sense of it.">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F4F4F0;--surface:#FAFAF7;--border:#DDDDD8;--border2:#EAEAE5;
+  --text:#141414;--muted:#666;--hint:#999;--faint:#BBB;
+  --blue:#2563EB;--blue-bg:#EBF2FE;--blue-border:#BFCFFB;
+  --green:#1D7A55;--green-bg:#E4F5ED;--green-border:#B6E3CB;
+  --radius:6px;--radius-lg:8px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-weight:400;line-height:1.6;padding-top:0}
+.wrap{max-width:880px;margin:0 auto;padding:0 2rem 5rem}
+
+nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.25rem 0;margin-bottom:2.75rem;background:rgba(244,244,240,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);font-weight:500;letter-spacing:.04em;text-decoration:none}
+.nav-links{display:flex;gap:1.5rem;align-items:center}
+.nav-links a{font-size:.8rem;color:var(--hint);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+
+.hero{display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;padding-bottom:2.5rem;border-bottom:1px solid var(--border)}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--green);background:var(--green-bg);border:1px solid var(--green-border);padding:5px 12px;border-radius:2px;margin-bottom:1.5rem}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:700;line-height:1.1;letter-spacing:-.03em}
+h1 em{font-style:normal;color:var(--blue)}
+.hero-sub{margin-top:1rem;font-size:.95rem;color:var(--muted);line-height:1.75;max-width:460px;font-weight:300}
+.hero-stats{text-align:right}
+.stat{margin-bottom:1rem}
+.stat-num{font-family:'IBM Plex Mono',monospace;font-size:1.8rem;font-weight:500;line-height:1}
+.stat-label{font-size:.7rem;color:var(--hint);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+
+.sec-label{display:flex;align-items:center;justify-content:space-between;margin:2.5rem 0 1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.sec-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:#888;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.sec-count{font-size:.7rem;color:var(--faint);font-family:'IBM Plex Mono',monospace}
+
+.bio-grid{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem}
+.bio-photo{width:90px;height:90px;border-radius:var(--radius);object-fit:cover;border:1px solid var(--border)}
+.bio-photo-placeholder{width:90px;height:90px;border-radius:var(--radius);background:var(--border2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.bio-name{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:2px}
+.bio-role{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--blue);margin-bottom:.85rem;letter-spacing:.03em}
+.bio-text{font-size:.875rem;color:var(--muted);line-height:1.8;font-weight:300}
+.bio-links{margin-top:1rem;display:flex;gap:.75rem;flex-wrap:wrap}
+.bio-link{font-size:.72rem;font-weight:500;padding:5px 14px;border-radius:3px;border:1px solid var(--border);color:var(--muted);text-decoration:none;background:#fff;transition:all .18s;font-family:'IBM Plex Mono',monospace}
+.bio-link:hover{border-color:var(--text);color:var(--text)}
+
+.tabs{display:flex;gap:4px;margin:2rem 0 1.25rem;background:#EAEAE5;padding:4px;border-radius:6px;width:fit-content}
+.tab{font-size:.78rem;font-weight:500;padding:6px 18px;border-radius:4px;border:none;cursor:pointer;background:transparent;color:#888;transition:all .18s;font-family:'Outfit',sans-serif}
+.tab.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+
+.projects{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.proj-card{background:var(--surface);padding:1.5rem;transition:background .18s}
+.proj-card:hover{background:#fff}
+.proj-card.span2{grid-column:1/-1}
+.proj-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
+.proj-idx{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--faint)}
+.proj-type{font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:500;padding:3px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:.06em}
+.proj-type.hw{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.proj-type.sw{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.proj-card h3{font-size:.975rem;font-weight:600;color:var(--text);line-height:1.35;margin-bottom:.5rem}
+.proj-card p{font-size:.83rem;color:var(--muted);line-height:1.7;font-weight:300}
+.proj-footer{margin-top:1.1rem;display:flex;align-items:center;justify-content:space-between}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:.65rem;font-family:'IBM Plex Mono',monospace;padding:3px 8px;border-radius:2px;background:#EAEAE5;color:#888;border:1px solid var(--border)}
+.proj-arrow{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .18s;color:var(--faint);font-size:14px;text-decoration:none}
+.proj-card:hover .proj-arrow{border-color:var(--text);background:var(--text);color:#fff}
+.proj-inner{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.proj-meta{border-left:1px solid var(--border2);padding-left:1.5rem;display:flex;flex-direction:column;gap:.6rem;justify-content:center}
+.meta-item{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--hint);display:flex;align-items:center;gap:8px}
+.meta-item::before{content:'—';color:#DDD}
+
+.blog-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.blog-card{background:var(--surface);padding:1.4rem;transition:background .18s;display:block;text-decoration:none;color:inherit}
+.blog-card:hover{background:#fff}
+.blog-cat{font-family:'IBM Plex Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);margin-bottom:.65rem}
+.blog-title{font-size:.9rem;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:.5rem}
+.blog-excerpt{font-size:.78rem;color:#888;line-height:1.65;font-weight:300}
+.blog-footer-row{margin-top:1rem;display:flex;align-items:center;justify-content:space-between}
+.blog-date{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--faint)}
+.blog-arrow{font-size:12px;color:#CCC;transition:color .18s}
+.blog-card:hover .blog-arrow{color:var(--text)}
+
+.empty-state{grid-column:1/-1;padding:3rem;text-align:center;color:var(--faint);font-size:.875rem;background:var(--surface)}
+.skeleton{animation:shimmer 1.5s infinite;background:linear-gradient(90deg,var(--border2) 25%,var(--border) 50%,var(--border2) 75%);background-size:200% 100%;border-radius:4px;height:1em;display:block}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+footer{margin-top:3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;padding-top:2rem;border-top:1px solid var(--border)}
+.foot-l{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--faint)}
+.foot-r{display:flex;gap:1.25rem}
+.foot-r a{font-size:.8rem;font-weight:500;color:#888;text-decoration:none;transition:color .2s}
+.foot-r a:hover{color:var(--text)}
+
+@media(max-width:640px){
+  .hero{grid-template-columns:1fr}.hero-stats{text-align:left}
+  .projects,.blog-grid{grid-template-columns:1fr}
+  .proj-card.span2 .proj-inner{grid-template-columns:1fr}
+  .proj-meta{border-left:none;border-top:1px solid var(--border2);padding-left:0;padding-top:1rem}
+  .bio-grid{grid-template-columns:1fr}
+}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.contact-info{}
+.contact-info h2{font-size:1.6rem;font-weight:700;letter-spacing:-.03em;line-height:1.2;margin-bottom:.75rem}
+.contact-info h2 em{font-style:normal;color:var(--blue)}
+.contact-info p{font-size:.9rem;color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:1.5rem}
+.contact-social{display:flex;flex-direction:column;gap:.6rem}
+.contact-social a{display:inline-flex;align-items:center;gap:10px;font-size:.82rem;font-weight:500;color:var(--text);text-decoration:none;font-family:'IBM Plex Mono',monospace;transition:color .2s}
+.contact-social a:hover{color:var(--blue)}
+.contact-social a span{font-size:.7rem;color:var(--hint)}
+.contact-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem}
+.contact-form .field{margin-bottom:.9rem}
+.contact-form label{font-size:.7rem;font-weight:600;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.contact-form input,.contact-form textarea{font-family:'Outfit',sans-serif;font-size:.875rem;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;width:100%;outline:none;transition:border-color .18s,box-shadow .18s}
+.contact-form input:focus,.contact-form textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.contact-form textarea{resize:vertical;min-height:110px}
+.contact-submit{display:inline-flex;align-items:center;gap:8px;font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:600;padding:9px 22px;border-radius:var(--radius);border:none;cursor:pointer;background:var(--text);color:#fff;transition:background .18s;width:100%;justify-content:center}
+.contact-submit:hover{background:#333}
+.contact-submit:disabled{opacity:.5;cursor:not-allowed}
+.contact-msg{font-size:.78rem;margin-top:.75rem;text-align:center;padding:8px;border-radius:var(--radius);display:none}
+.contact-msg.success{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);display:block}
+.contact-msg.error{background:var(--red-bg,#FEF2F2);color:#DC2626;border:1px solid #FECACA;display:block}
+@media(max-width:640px){.contact-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="nav-logo" href="/">samuel.dev</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#projects">Work</a>
+      <a href="#blog">Blog</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div>
+      <div class="hero-badge"><span class="hero-dot"></span> Available for new projects</div>
+      <h1>Embedded systems<br>&amp; <em>intelligent</em><br>software.</h1>
+      <p class="hero-sub" id="hero-sub"></p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num" id="stat-projects">—</div><div class="stat-label">Projects</div></div>
+      <div class="stat" style="margin-top:1.25rem"><div class="stat-num" id="stat-posts">—</div><div class="stat-label">Posts</div></div>
+    </div>
+  </div>
+
+  <div id="about">
+    <div class="sec-label"><span class="sec-title">About</span></div>
+    <div class="bio-grid" id="bio-section">
+      <div class="bio-photo-placeholder"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#AAA" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+      <div>
+        <div class="bio-name skeleton" style="width:180px;margin-bottom:8px">&nbsp;</div>
+        <div class="skeleton" style="width:240px;height:.8em;margin-bottom:16px">&nbsp;</div>
+        <div class="skeleton" style="width:100%;margin-bottom:6px">&nbsp;</div>
+        <div class="skeleton" style="width:90%">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="projects">
+    <div class="sec-label">
+      <span class="sec-title">Projects</span>
+      <span class="sec-count" id="proj-count-label">—</span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="filterProjects('all',this)">All</button>
+      <button class="tab" onclick="filterProjects('hw',this)">Embedded</button>
+      <button class="tab" onclick="filterProjects('sw',this)">Software</button>
+    </div>
+    <div class="projects" id="projects-grid"><div class="empty-state">Loading projects...</div></div>
+  </div>
+
+  <div id="blog">
+    <div class="sec-label" style="margin-top:3rem">
+      <span class="sec-title">Blog</span>
+      <span class="sec-count" id="blog-count-label">—</span>
+    </div>
+    <div class="blog-grid" id="blog-grid"><div class="empty-state">Loading posts...</div></div>
+  </div>
+
+
+  <!-- CONTACT -->
+  <div id="contact">
+    <div class="sec-label" style="margin-top:3rem">
+      <span class="sec-title">Contact</span>
+      <span class="sec-count">Get in touch</span>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h2>Let's build something <em>great</em> together.</h2>
+        <p>Whether you have a project in mind, a question about my work, or just want to connect — my inbox is always open.</p>
+        <div class="contact-social" id="contact-social">
+          <!-- populated by JS -->
+        </div>
+      </div>
+      <div class="contact-form">
+        <div class="field">
+          <label>Your Name</label>
+          <input type="text" id="cf-name" placeholder="John Doe">
+        </div>
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" id="cf-email" placeholder="john@example.com">
+        </div>
+        <div class="field">
+          <label>Message</label>
+          <textarea id="cf-message" placeholder="Tell me about your project..."></textarea>
+        </div>
+        <button class="contact-submit" id="cf-submit" onclick="submitContact()">Send Message</button>
+        <div class="contact-msg" id="cf-msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="foot-l">// Samuel Ojayhagbega · 2025</span>
+    <div class="foot-r" id="footer-links"></div>
+  </footer>
+</div>
+
+<script>
+const API = "/api";
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+let allProjects = [];
+
+async function loadAll(){
+  try {
+    const [bio, projects, posts] = await Promise.all([
+      fetch(`${API}/bio`).then(r=>r.json()),
+      fetch(`${API}/projects`).then(r=>r.json()),
+      fetch(`${API}/posts`).then(r=>r.json()),
+    ]);
+    allProjects = projects || [];
+    renderBio(bio);
+    renderProjects(allProjects, "all");
+    renderBlog(posts || []);
+    document.getElementById("stat-projects").textContent = String(allProjects.length).padStart(2,"0");
+    document.getElementById("stat-posts").textContent = String((posts||[]).length).padStart(2,"0");
+  } catch(e) {
+    document.getElementById("projects-grid").innerHTML = '<div class="empty-state">Could not load content. Please try again later.</div>';
+  }
+}
+
+function renderBio(b){
+  if(!b||!b.name) return;
+  document.title = `${b.name} — ${b.role}`;
+  typewriterEffect("hero-sub", b.tagline || "");
+  const photoHTML = b.photo
+    ? `<img class="bio-photo" src="${esc(b.photo)}" alt="${esc(b.name)}">`
+    : `<div class="bio-photo-placeholder"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#AAA" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>`;
+  document.getElementById("bio-section").innerHTML = `
+    ${photoHTML}
+    <div>
+      <div class="bio-name">${esc(b.name)}</div>
+      <div class="bio-role">${esc(b.role)}</div>
+      <p class="bio-text">${esc(b.bio)}</p>
+      <div class="bio-links">
+        ${b.github ? `<a class="bio-link" href="${esc(b.github)}" target="_blank">GitHub</a>` : ""}
+        ${b.linkedin ? `<a class="bio-link" href="${esc(b.linkedin)}" target="_blank">LinkedIn</a>` : ""}
+        ${b.email ? `<a class="bio-link" href="mailto:${esc(b.email)}">Contact</a>` : ""}
+      </div>
+    </div>`;
+
+  // Contact social links
+  // Store email on submit button for mailto
+  const submitBtn = document.getElementById("cf-submit");
+  if(submitBtn && b.email) submitBtn.dataset.email = b.email;
+
+  const social = document.getElementById("contact-social");
+  if(social){
+    social.innerHTML = `
+      ${b.email ? `<a href="mailto:${esc(b.email)}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>${esc(b.email)}<span>Email</span></a>` : ""}
+      ${b.github ? `<a href="${esc(b.github)}" target="_blank"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>GitHub<span>View my work</span></a>` : ""}
+      ${b.linkedin ? `<a href="${esc(b.linkedin)}" target="_blank"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn<span>Connect with me</span></a>` : ""}
+    `;
+  }
+
+  document.getElementById("footer-links").innerHTML = `
+    ${b.github ? `<a href="${esc(b.github)}" target="_blank">GitHub</a>` : ""}
+    ${b.linkedin ? `<a href="${esc(b.linkedin)}" target="_blank">LinkedIn</a>` : ""}
+    ${b.email ? `<a href="mailto:${esc(b.email)}">Contact</a>` : ""}`;
+}
+
+function renderProjects(projects, filter){
+  const filtered = filter === "all" ? projects : projects.filter(p=>p.type===filter);
+  document.getElementById("proj-count-label").textContent = filtered.length + " total";
+  const grid = document.getElementById("projects-grid");
+  if(!filtered.length){grid.innerHTML='<div class="empty-state">No projects found.</div>';return}
+  grid.innerHTML = filtered.map((p,i)=>{
+    const hasF = p.features && p.features.length > 0;
+    const idx = `${String(i+1).padStart(2,"0")} / ${String(filtered.length).padStart(2,"0")}`;
+    const type = `<span class="proj-type ${p.type}">${p.type==="hw"?"Hardware":"Software"}</span>`;
+    const tags = (p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("");
+    const arrow = p.url ? `<a class="proj-arrow" href="${esc(p.url)}" target="_blank">↗</a>` : `<span class="proj-arrow">↗</span>`;
+    const cardLink = `href="/project.html?id=${p.id}"`;
+    if(hasF) return `<div class="proj-card span2" style="cursor:pointer" onclick="window.location='/project.html?id=${p.id}'">
+      <div class="proj-inner">
+        <div>
+          <div class="proj-top"><span class="proj-idx">${idx}</span>${type}</div>
+          <h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>
+          <div class="proj-footer"><div class="tags">${tags}</div>${arrow}</div>
+        </div>
+        <div class="proj-meta">${p.features.map(f=>`<div class="meta-item">${esc(f)}</div>`).join("")}</div>
+      </div></div>`;
+    return `<div class="proj-card" style="cursor:pointer" onclick="window.location='/project.html?id=${p.id}'">
+      <div class="proj-top"><span class="proj-idx">${idx}</span>${type}</div>
+      <h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>
+      <div class="proj-footer"><div class="tags">${tags}</div>${arrow}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderBlog(posts){
+  document.getElementById("blog-count-label").textContent = posts.length ? posts.length+" posts" : "No posts yet";
+  const grid = document.getElementById("blog-grid");
+  if(!posts.length){grid.innerHTML='<div class="empty-state">No posts yet — check back soon.</div>';return}
+  grid.innerHTML = posts.slice(0,6).map(p=>`
+    <a class="blog-card" ${p.url?`href="${esc(p.url)}" target="_blank"`:'href="#blog"'}>
+      <div class="blog-cat">${esc(p.category||"General")}</div>
+      <div class="blog-title">${esc(p.title)}</div>
+      <div class="blog-excerpt">${esc(p.excerpt||"")}</div>
+      <div class="blog-footer-row">
+        <span class="blog-date">${p.date?new Date(p.date).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"Coming soon"}</span>
+        <span class="blog-arrow">↗</span>
+      </div>
+    </a>`).join("");
+}
+
+function filterProjects(filter, el){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  renderProjects(allProjects, filter);
+}
+
+
+function submitContact(){
+  const name    = document.getElementById("cf-name").value.trim();
+  const email   = document.getElementById("cf-email").value.trim();
+  const message = document.getElementById("cf-message").value.trim();
+  const msg     = document.getElementById("cf-msg");
+
+  if(!name || !email || !message){
+    msg.className="contact-msg error";
+    msg.textContent="Please fill in all fields.";
+    return;
+  }
+
+  // Get the contact email from bio data
+  const bioEmail = document.getElementById("cf-submit").dataset.email || "";
+  if(!bioEmail){
+    msg.className="contact-msg error";
+    msg.textContent="Contact email not configured yet.";
+    return;
+  }
+
+  const subject  = encodeURIComponent(`Portfolio Contact from ${name}`);
+  const body     = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+  window.location.href = `mailto:${bioEmail}?subject=${subject}&body=${body}`;
+}
+
+
+function typewriterEffect(elementId, text) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+
+  // Split into sentences for line breaks
+  const sentences = text.split(/(?<=\.)\s+/);
+  const parts = sentences.map((s, i) => i < sentences.length - 1 ? s + "<br>" : s);
+  const fullHTML = parts.join("");
+
+  // Build a flat array of characters to type, preserving <br> tags
+  const chars = [];
+  let i = 0;
+  while (i < fullHTML.length) {
+    if (fullHTML.slice(i, i + 4) === "<br>") {
+      chars.push("<br>");
+      i += 4;
+    } else {
+      chars.push(fullHTML[i]);
+      i++;
+    }
+  }
+
+  el.innerHTML = "";
+  el.style.borderRight = "2px solid var(--text)";
+  el.style.display = "inline-block";
+
+  let index = 0;
+  let current = "";
+
+  const interval = setInterval(() => {
+    if (index >= chars.length) {
+      clearInterval(interval);
+      // Remove cursor blink after typing
+      setTimeout(() => { el.style.borderRight = "none"; }, 800);
+      return;
+    }
+    current += chars[index];
+    el.innerHTML = current;
+    index++;
+  }, 28);
+}
+
+loadAll();
+</script>
+</body>
+</html>

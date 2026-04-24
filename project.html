@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project — Samuel Ojayhagbega</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F4F4F0;--surface:#FAFAF7;--border:#DDDDD8;--border2:#EAEAE5;
+  --text:#141414;--muted:#666;--hint:#999;--faint:#BBB;
+  --blue:#2563EB;--blue-bg:#EBF2FE;--blue-border:#BFCFFB;
+  --green:#1D7A55;--green-bg:#E4F5ED;--green-border:#B6E3CB;
+  --radius:6px;--radius-lg:8px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-weight:400;line-height:1.6}
+.wrap{max-width:880px;margin:0 auto;padding:0 2rem 5rem}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.25rem 0;margin-bottom:2.75rem;background:rgba(244,244,240,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);font-weight:500;letter-spacing:.04em;text-decoration:none}
+.nav-back{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:var(--hint);text-decoration:none;transition:color .2s;font-weight:500}
+.nav-back:hover{color:var(--text)}
+.nav-back svg{transition:transform .2s}
+.nav-back:hover svg{transform:translateX(-3px)}
+
+/* HERO */
+.proj-hero{padding:2.5rem 0 2rem;border-bottom:1px solid var(--border);margin-bottom:2.5rem}
+.proj-meta-row{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.proj-type{font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:500;padding:3px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:.06em}
+.proj-type.hw{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.proj-type.sw{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.proj-id{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--faint)}
+.proj-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;line-height:1.1;letter-spacing:-.03em;margin-bottom:.85rem}
+.proj-short{font-size:1rem;color:var(--muted);line-height:1.75;max-width:600px;font-weight:300;margin-bottom:1.25rem}
+.proj-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem}
+.tag{font-size:.65rem;font-family:'IBM Plex Mono',monospace;padding:3px 8px;border-radius:2px;background:#EAEAE5;color:#888;border:1px solid var(--border)}
+.proj-links{display:flex;gap:.75rem;flex-wrap:wrap}
+.proj-link{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;padding:8px 18px;border-radius:var(--radius);text-decoration:none;transition:all .18s}
+.proj-link.primary{background:var(--text);color:#fff;border:1px solid var(--text)}
+.proj-link.primary:hover{background:#333}
+.proj-link.outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.proj-link.outline:hover{border-color:var(--text)}
+
+/* SECTIONS */
+.sec-label{display:flex;align-items:center;justify-content:space-between;margin:2.5rem 0 1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.sec-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:#888;font-weight:600;font-family:'IBM Plex Mono',monospace}
+
+/* CONTENT BLOCKS */
+.content-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem;margin-bottom:1rem}
+.content-block h3{font-size:.95rem;font-weight:700;margin-bottom:.85rem;color:var(--text)}
+.content-block p{font-size:.9rem;color:var(--muted);line-height:1.85;font-weight:300}
+
+/* 2 COLUMN GRID */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+/* FEATURES */
+.features-list{display:flex;flex-direction:column;gap:.5rem}
+.feature-item{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--muted);font-weight:300}
+.feature-item::before{content:'→';color:var(--blue);font-family:'IBM Plex Mono',monospace;font-size:.75rem;flex-shrink:0}
+
+/* IMAGES */
+.images-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.image-card{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface)}
+.image-card img{width:100%;height:200px;object-fit:cover;display:block}
+.image-caption{font-size:.72rem;color:var(--hint);padding:.6rem .85rem;font-family:'IBM Plex Mono',monospace;border-top:1px solid var(--border2)}
+
+/* CODE SNIPPETS */
+.snippet-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1rem}
+.snippet-header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.1rem;border-bottom:1px solid var(--border2);background:#F7F6F3}
+.snippet-title{font-size:.82rem;font-weight:600;color:var(--text)}
+.snippet-lang{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--blue);background:var(--blue-bg);border:1px solid var(--blue-border);padding:2px 8px;border-radius:2px;text-transform:uppercase}
+.snippet-card pre{margin:0;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.6}
+.snippet-card code{font-family:'IBM Plex Mono',monospace}
+
+/* TECH STACK */
+.tech-text{font-size:.88rem;color:var(--muted);line-height:1.85;font-weight:300}
+
+/* SKELETON */
+.skeleton{animation:shimmer 1.5s infinite;background:linear-gradient(90deg,var(--border2) 25%,var(--border) 50%,var(--border2) 75%);background-size:200% 100%;border-radius:4px;height:1em;display:block}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* FOOTER */
+footer{margin-top:3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;padding-top:2rem;border-top:1px solid var(--border)}
+.foot-l{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--faint)}
+.foot-r{display:flex;gap:1.25rem}
+.foot-r a{font-size:.8rem;font-weight:500;color:#888;text-decoration:none;transition:color .2s}
+.foot-r a:hover{color:var(--text)}
+
+.not-found{text-align:center;padding:4rem 2rem;color:var(--faint)}
+.not-found h2{font-size:1.2rem;font-weight:600;margin-bottom:.5rem;color:var(--text)}
+.not-found p{font-size:.875rem}
+
+@media(max-width:640px){
+  .two-col{grid-template-columns:1fr}
+  .images-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <a class="nav-logo" href="/">samuel.dev</a>
+    <a class="nav-back" href="/">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to portfolio
+    </a>
+  </nav>
+
+  <div id="project-content">
+    <!-- Loading skeleton -->
+    <div class="proj-hero">
+      <div class="skeleton" style="width:80px;height:.8em;margin-bottom:1.25rem"></div>
+      <div class="skeleton" style="width:60%;height:2rem;margin-bottom:.85rem"></div>
+      <div class="skeleton" style="width:90%;height:.9em;margin-bottom:.5rem"></div>
+      <div class="skeleton" style="width:75%;height:.9em;margin-bottom:1.25rem"></div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="foot-l">// Samuel Ojayhagbega · 2025</span>
+    <div class="foot-r">
+      <a href="/">Home</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const API = "/api";
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+
+async function loadProject(){
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  if(!id){
+    renderNotFound();
+    return;
+  }
+
+  try {
+    const p = await fetch(`${API}/projects/${id}`).then(r=>{
+      if(!r.ok) throw new Error("Not found");
+      return r.json();
+    });
+    renderProject(p);
+  } catch(e){
+    renderNotFound();
+  }
+}
+
+function renderProject(p){
+  document.title = `${p.name} — Samuel Ojayhagbega`;
+  const typeLabel = p.type === "hw" ? "Hardware" : "Software";
+  const tags = (p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("");
+  const features = (p.features||[]).map(f=>`<div class="feature-item">${esc(f)}</div>`).join("");
+
+  let html = `
+    <div class="proj-hero">
+      <div class="proj-meta-row">
+        <span class="proj-type ${p.type}">${typeLabel}</span>
+        <span class="proj-id">Project #${String(p.id).padStart(2,"0")}</span>
+      </div>
+      <h1 class="proj-title">${esc(p.name)}</h1>
+      <p class="proj-short">${esc(p.description)}</p>
+      <div class="proj-tags">${tags}</div>
+      <div class="proj-links">
+        ${p.url ? `<a class="proj-link primary" href="${esc(p.url)}" target="_blank">View Project ↗</a>` : ""}
+        <a class="proj-link outline" href="/#projects">← All Projects</a>
+      </div>
+    </div>`;
+
+  // Overview + Features side by side
+  if(p.overview || features){
+    html += `<div class="two-col">`;
+    if(p.overview){
+      html += `<div class="content-block"><h3>Overview</h3><p>${esc(p.overview)}</p></div>`;
+    }
+    if(features){
+      html += `<div class="content-block"><h3>Key Features</h3><div class="features-list">${features}</div></div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Full description
+  if(p.full_description){
+    html += `
+      <div class="sec-label"><span class="sec-title">About this project</span></div>
+      <div class="content-block"><p>${esc(p.full_description).replace(/\n/g,"<br>")}</p></div>`;
+  }
+
+  // Images
+  if(p.images && p.images.length > 0){
+    html += `<div class="sec-label"><span class="sec-title">Images</span><span style="font-size:.7rem;color:var(--faint);font-family:'IBM Plex Mono',monospace">${p.images.length} photos</span></div>`;
+    html += `<div class="images-grid">`;
+    p.images.forEach(img => {
+      html += `<div class="image-card">
+        <img src="${esc(img.url)}" alt="${esc(img.caption||p.name)}" loading="lazy">
+        ${img.caption ? `<div class="image-caption">${esc(img.caption)}</div>` : ""}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Challenges + Outcome
+  if(p.challenges || p.outcome){
+    html += `<div class="two-col" style="margin-top:1rem">`;
+    if(p.challenges){
+      html += `<div class="content-block"><h3>Challenges</h3><p>${esc(p.challenges).replace(/\n/g,"<br>")}</p></div>`;
+    }
+    if(p.outcome){
+      html += `<div class="content-block"><h3>Outcome</h3><p>${esc(p.outcome).replace(/\n/g,"<br>")}</p></div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Tech stack
+  if(p.tech_stack){
+    html += `
+      <div class="sec-label"><span class="sec-title">Tech Stack</span></div>
+      <div class="content-block"><p class="tech-text">${esc(p.tech_stack).replace(/\n/g,"<br>")}</p></div>`;
+  }
+
+  // Code snippets
+  if(p.code_snippets && p.code_snippets.length > 0){
+    html += `<div class="sec-label"><span class="sec-title">Code Snippets</span><span style="font-size:.7rem;color:var(--faint);font-family:'IBM Plex Mono',monospace">${p.code_snippets.length} snippets</span></div>`;
+    p.code_snippets.forEach(s => {
+      html += `<div class="snippet-card">
+        <div class="snippet-header">
+          <span class="snippet-title">${esc(s.title||"Snippet")}</span>
+          <span class="snippet-lang">${esc(s.language||"code")}</span>
+        </div>
+        <pre><code class="language-${esc(s.language||"plaintext")}">${esc(s.code||"")}</code></pre>
+      </div>`;
+    });
+  }
+
+  document.getElementById("project-content").innerHTML = html;
+  // Syntax highlight all code blocks
+  document.querySelectorAll("pre code").forEach(el => hljs.highlightElement(el));
+}
+
+function renderNotFound(){
+  document.getElementById("project-content").innerHTML = `
+    <div class="not-found">
+      <h2>Project not found</h2>
+      <p>This project doesn't exist or may have been removed.</p>
+      <a href="/#projects" style="display:inline-block;margin-top:1rem;font-size:.85rem;color:var(--blue)">← Back to all projects</a>
+    </div>`;
+}
+
+loadProject();
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Portfolio Admin"
+AuthUserFile /home/YOURUSERNAME/.htpasswd
+Require valid-user
