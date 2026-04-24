@@ -88,15 +88,22 @@ label{font-size:.72rem;font-weight:600;color:var(--muted);display:block;margin-b
 @media(max-width:700px){.sidebar{display:none}.main{margin-left:0;padding:1.5rem}.form-row{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}}
 
 /* QUILL EDITOR */
-.quill-field{margin-bottom:1rem}
+.quill-field{margin-bottom:1.25rem;position:relative}
 .quill-field label{font-size:.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
-.ql-toolbar{border:1px solid var(--border)!important;border-bottom:none!important;border-radius:var(--radius) var(--radius) 0 0!important;background:#FAFAF9;font-family:'Outfit',sans-serif!important}
-.ql-container{border:1px solid var(--border)!important;border-radius:0 0 var(--radius) var(--radius)!important;font-family:'Outfit',sans-serif!important;font-size:.875rem!important}
-.ql-container:focus-within{border-color:var(--blue)!important;box-shadow:0 0 0 3px rgba(37,99,235,.1)!important}
-.ql-editor{min-height:150px;line-height:1.7}
-.ql-editor.ql-blank::before{font-style:normal!important;color:var(--faint)!important}
-.ql-editor p{margin-bottom:.5rem}
+.quill-wrap{border:1px solid var(--border);border-radius:var(--radius);overflow:visible;background:#fff;transition:border-color .18s,box-shadow .18s}
+.quill-wrap:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.ql-toolbar.ql-snow{border:none!important;border-bottom:1px solid var(--border)!important;border-radius:var(--radius) var(--radius) 0 0!important;background:#FAFAF9!important;font-family:'Outfit',sans-serif!important;padding:.5rem!important;flex-wrap:wrap;position:relative;z-index:10}
+.ql-container.ql-snow{border:none!important;border-radius:0 0 var(--radius) var(--radius)!important;font-family:'Outfit',sans-serif!important;font-size:.875rem!important;position:relative;z-index:1}
+.ql-editor{min-height:140px;line-height:1.75;padding:1rem!important}
+.ql-editor.ql-blank::before{font-style:normal!important;color:var(--faint)!important;left:1rem!important}
+.ql-editor p{margin-bottom:.4rem}
 .ql-snow .ql-picker{font-family:'Outfit',sans-serif!important}
+.ql-snow .ql-picker-options{z-index:9999!important;background:#fff!important;border:1px solid var(--border)!important;border-radius:var(--radius)!important;box-shadow:0 4px 12px rgba(0,0,0,.1)!important;position:absolute!important}
+.ql-snow .ql-tooltip{z-index:9999!important;background:#fff!important;border:1px solid var(--border)!important;border-radius:var(--radius)!important;box-shadow:0 4px 12px rgba(0,0,0,.1)!important}
+.ql-toolbar .ql-formats{margin-right:.5rem!important}
+/* Prevent Quill toolbar from clipping */
+.card{overflow:visible!important}
+.main{overflow-x:hidden}
 </style>
 </head>
 <body>
@@ -162,7 +169,7 @@ label{font-size:.72rem;font-weight:600;color:var(--muted);display:block;margin-b
         <div class="field"><label>Category</label><input type="text" id="pf-cat" placeholder="e.g. Embedded Systems"></div>
       </div>
       <div class="field"><label>Excerpt</label><textarea id="pf-excerpt" rows="3" placeholder="Short summary shown on the portfolio..."></textarea></div>
-      <div class="quill-field"><label>Full Content</label><div id="pf-content-editor" style="min-height:220px"></div><textarea id="pf-content" style="display:none"></textarea></div>
+      <div class="quill-field"><label>Full Content</label><div class="quill-wrap"><div id="pf-content-editor" style="min-height:220px"></div></div><textarea id="pf-content" style="display:none"></textarea></div>
       <div class="form-row">
         <div class="field"><label>External URL <span style="text-transform:none;font-weight:400;color:var(--hint)">(optional)</span></label><input type="text" id="pf-url" placeholder="https://medium.com/..."></div>
         <div class="field"><label>Publish Date</label><input type="date" id="pf-date"></div>
@@ -188,14 +195,14 @@ label{font-size:.72rem;font-weight:600;color:var(--muted);display:block;margin-b
         <div class="field"><label>Type</label><select id="pjf-type"><option value="hw">Hardware / Embedded</option><option value="sw">Software</option></select></div>
       </div>
       <div class="field"><label>Short Description <span style="text-transform:none;font-weight:400;color:var(--hint)">(shown on home page)</span></label><textarea id="pjf-desc" rows="2" placeholder="One or two sentence summary..."></textarea></div>
-      <div class="quill-field"><label>Full Description <span style="text-transform:none;font-weight:400;color:var(--hint)">(shown on project page)</span></label><div id="pjf-full-desc-editor" style="min-height:200px"></div><textarea id="pjf-full-desc" style="display:none"></textarea></div>
+      <div class="quill-field"><label>Full Description <span style="text-transform:none;font-weight:400;color:var(--hint)">(shown on project page)</span></label><div class="quill-wrap"><div id="pjf-full-desc-editor" style="min-height:200px"></div></div><textarea id="pjf-full-desc" style="display:none"></textarea></div>
       <div class="form-row">
-        <div class="quill-field"><label>Overview</label><div id="pjf-overview-editor" style="min-height:160px"></div><textarea id="pjf-overview" style="display:none"></textarea></div>
+        <div class="quill-field"><label>Overview</label><div class="quill-wrap"><div id="pjf-overview-editor" style="min-height:160px"></div></div><textarea id="pjf-overview" style="display:none"></textarea></div>
         <div class="field"><label>Feature Highlights <span style="text-transform:none;font-weight:400;color:var(--hint)">(one per line)</span></label><textarea id="pjf-features" rows="4" placeholder="Real-time monitoring&#10;Anomaly detection"></textarea></div>
       </div>
       <div class="form-row">
-        <div class="quill-field"><label>Challenges</label><div id="pjf-challenges-editor" style="min-height:160px"></div><textarea id="pjf-challenges" style="display:none"></textarea></div>
-        <div class="quill-field"><label>Outcome</label><div id="pjf-outcome-editor" style="min-height:160px"></div><textarea id="pjf-outcome" style="display:none"></textarea></div>
+        <div class="quill-field"><label>Challenges</label><div class="quill-wrap"><div id="pjf-challenges-editor" style="min-height:160px"></div></div><textarea id="pjf-challenges" style="display:none"></textarea></div>
+        <div class="quill-field"><label>Outcome</label><div class="quill-wrap"><div id="pjf-outcome-editor" style="min-height:160px"></div></div><textarea id="pjf-outcome" style="display:none"></textarea></div>
       </div>
       <div class="field"><label>Tech Stack <span style="text-transform:none;font-weight:400;color:var(--hint)">(detailed breakdown)</span></label><textarea id="pjf-tech-stack" rows="3" placeholder="STM32F4 microcontroller, FreeRTOS, MQTT protocol..."></textarea></div>
       <div class="field"><label>Tags <span style="text-transform:none;font-weight:400;color:var(--hint)">(comma separated)</span></label><input type="text" id="pjf-tags" placeholder="Embedded C, RTOS, IoT"></div>
